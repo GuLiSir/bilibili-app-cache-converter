@@ -11,7 +11,20 @@ logging.basicConfig(level=logging.DEBUG,  # 日志级别
                     format='%(asctime)s-[%(filename)s-->line:%(lineno)d]-[%(levelname)s]%(message)s')
 
 def validPathName(name:str):
-    result = name.replace(":","")
+    #非法字符 '[:*?"<>|]'
+    result = name.replace("[","")
+    result = result.replace(":","")
+    result = result.replace("*","")
+    result = result.replace("?","")
+    result = result.replace("\"","")
+    result = result.replace("<","")
+    result = result.replace(">","")
+    result = result.replace("|","")
+    result = result.replace("]","")
+    #最后不能以.结尾
+    while result.endswith("."):
+        result = result[:-1]
+    # result = result.replace("！","")
     return result
 
 # Press the green button in the gutter to run the script.
@@ -55,16 +68,14 @@ if __name__ == '__main__':
                 '/', chr(ord('/') + 65248)).replace('\\', chr(ord('\\') + 65248))
             logging.info("当前视频主标题: " + videoTitle)
             logging.info("当前分p副标题: " + videoSubtitle)
+            if len(videoSubtitle) > 0 and videoTitle != videoSubtitle and videoTitle in videoSubtitle:
+                videoSubtitle = videoSubtitle.replace(videoTitle,"")
+                logging.info("去除分p副标题重复的部分  当前分p副标题: " + videoSubtitle)
 
             for digitFolder in list(filter(os.path.isdir, os.listdir())):  # 视频一般放在分p文件夹中的数字文件夹中，一般数字文件夹仅一个
                 sepPath = os.path.join(directory, videoNameDir, cDir, digitFolder)
                 os.chdir(sepPath)  # 进入分p的m4s文件夹
 
-                # # newName = videoName + cDir + ".mp4"
-                # if multiFlag == 0:
-                #     newName = videoTitle + ".mp4"
-                # else:
-                #     newName = videoTitle + "-" + videoSubtitle + ".mp4"
 
                 #分p的话就建立新文件夹,不分p的话就直接在输出目录
                 realOutputDir = outputDir
