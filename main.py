@@ -17,8 +17,8 @@ def validPathName(name:str):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    downloadDir = "D:\哔哩哔哩"  # 存放从手机复制而来的文件夹的地方
-    outputDir = "D:\哔哩哔哩输出"  # 存放最终mp4文件的地方
+    downloadDir = "D:\输入文件夹"  # 存放从手机复制而来的文件夹的地方
+    outputDir = "D:\输出文件夹"  # 存放最终mp4文件的地方
     REMOVEOri = False  # 如果需要将源文件删除，将其更改为True
 
     os.chdir(downloadDir)
