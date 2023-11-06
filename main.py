@@ -33,6 +33,7 @@ if __name__ == '__main__':
     downloadDir = "D:\输入文件夹"  # 存放从手机复制而来的文件夹的地方
     outputDir = "D:\输出文件夹"  # 存放最终mp4文件的地方
     REMOVEOri = False  # 如果需要将源文件删除，将其更改为True
+    CREATE_UP_DIR = True #如果需要将同一个up的视频放在单独一个文件夹,则改为True
 
     os.chdir(downloadDir)
     directory = os.getcwd()
@@ -76,18 +77,26 @@ if __name__ == '__main__':
                 sepPath = os.path.join(directory, videoNameDir, cDir, digitFolder)
                 os.chdir(sepPath)  # 进入分p的m4s文件夹
 
+                    
 
                 #分p的话就建立新文件夹,不分p的话就直接在输出目录
                 realOutputDir = outputDir
+                if CREATE_UP_DIR:
+                    upName = row_data.get("owner_name","未知up")
+                    upName = validPathName(upName)
+                    logging.info("当前up名称: " + upName)
+                    realOutputDir = os.path.join(realOutputDir, upName)
+
+
                 if multiFlag == 0:
                     newName = videoTitle + ".mp4"
                 else:
                     newName = videoSubtitle + ".mp4"
-                    realOutputDir = os.path.join(outputDir , validPathName(videoTitle))
+                    realOutputDir = os.path.join(realOutputDir , validPathName(videoTitle))
                 newName = validPathName(newName)
                 #创建不存在的目录
                 if not os.path.exists(realOutputDir):
-                    os.mkdir(realOutputDir)
+                    os.makedirs(realOutputDir)
 
                 filePathOfOutput_newName_with_NewPath = os.path.join(realOutputDir, newName)
 
