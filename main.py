@@ -10,11 +10,15 @@ import logging
 logging.basicConfig(level=logging.DEBUG,  # 日志级别
                     format='%(asctime)s-[%(filename)s-->line:%(lineno)d]-[%(levelname)s]%(message)s')
 
+def validPathName(name:str):
+    result = name.replace(":","")
+    return result
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    downloadDir = "E:/bilicache/download"  # 存放从手机复制而来的文件夹的地方
-    outputDir = "E:/converted"  # 存放最终mp4文件的地方
+    downloadDir = "D:\哔哩哔哩"  # 存放从手机复制而来的文件夹的地方
+    outputDir = "D:\哔哩哔哩输出"  # 存放最终mp4文件的地方
     REMOVEOri = False  # 如果需要将源文件删除，将其更改为True
 
     os.chdir(downloadDir)
@@ -56,12 +60,25 @@ if __name__ == '__main__':
                 sepPath = os.path.join(directory, videoNameDir, cDir, digitFolder)
                 os.chdir(sepPath)  # 进入分p的m4s文件夹
 
-                # newName = videoName + cDir + ".mp4"
+                # # newName = videoName + cDir + ".mp4"
+                # if multiFlag == 0:
+                #     newName = videoTitle + ".mp4"
+                # else:
+                #     newName = videoTitle + "-" + videoSubtitle + ".mp4"
+
+                #分p的话就建立新文件夹,不分p的话就直接在输出目录
+                realOutputDir = outputDir
                 if multiFlag == 0:
                     newName = videoTitle + ".mp4"
                 else:
-                    newName = videoTitle + "-" + videoSubtitle + ".mp4"
-                filePathOfOutput_newName_with_NewPath = os.path.join(outputDir, newName)
+                    newName = videoSubtitle + ".mp4"
+                    realOutputDir = os.path.join(outputDir , validPathName(videoTitle))
+                newName = validPathName(newName)
+                #创建不存在的目录
+                if not os.path.exists(realOutputDir):
+                    os.mkdir(realOutputDir)
+
+                filePathOfOutput_newName_with_NewPath = os.path.join(realOutputDir, newName)
 
                 if os.path.exists(filePathOfOutput_newName_with_NewPath):
                     logging.warning("视频 " + newName + " 已存在 跳过")
